@@ -18,6 +18,14 @@ func NewEngine(cfg config.ServiceConfig, opt luragin.EngineOptions) *gin.Engine 
   ...
 ```
 
+You can also use the `correlationid` middleware with any other `gin` application:
+
+```go
+engine := gin.New()
+correlationid.Header = "My-Correlation-Id-Header" // optional
+engine.Use(correlationid.Middleware)
+```
+
 ## Usage
 
 The `correlationid` middleware can be enabled using the following global

@@ -45,10 +45,10 @@ func ConfigGetter(extraCfg config.ExtraConfig) (*Config, bool) {
 }
 
 func Middleware(c *gin.Context) {
-	if c.Request.Header.Get("X-Correlation-Id") == "" {
-		c.Request.Header.Set("X-Correlation-Id", strings.ToUpper(uuid.NewV4().String()))
+	if c.Request.Header.Get(Header) == "" {
+		c.Request.Header.Set(Header, strings.ToUpper(uuid.NewV4().String()))
 	}
-	c.Writer.Header().Set("X-Correlation-Id", c.Request.Header.Get("X-Correlation-Id"))
+	c.Writer.Header().Set(Header, c.Request.Header.Get(Header))
 	c.Next()
 }
 
