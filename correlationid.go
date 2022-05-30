@@ -44,6 +44,14 @@ func ConfigGetter(extraCfg config.ExtraConfig) (*Config, bool) {
 	return cfg, true
 }
 
+func Middleware(c *gin.Context) {
+	if c.Request.Header.Get(Header) == "" {
+		c.Request.Header.Set(Header, strings.ToUpper(uuid.NewV4().String()))
+	}
+	c.Writer.Header().Set(Header, c.Request.Header.Get(Header))
+	c.Next()
+}
+
 func HandlerFunc(extraCfg config.ExtraConfig) gin.HandlerFunc {
 	cfg, ok := ConfigGetter(extraCfg)
 	if !ok || !cfg.Enabled {
@@ -51,12 +59,5 @@ func HandlerFunc(extraCfg config.ExtraConfig) gin.HandlerFunc {
 			c.Next()
 		}
 	}
-
-	return func(c *gin.Context) {
-		if c.Request.Header.Get(cfg.Header) == "" {
-			correlationID := strings.ToUpper(uuid.NewV4().String())
-			c.Request.Header[cfg.Header] = []string{correlationID}
-		}
-		c.Next()
-	}
+	return Middleware
 }
