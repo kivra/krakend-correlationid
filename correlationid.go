@@ -48,7 +48,6 @@ func Middleware(c *gin.Context) {
 	if c.Request.Header.Get(Header) == "" {
 		c.Request.Header.Set(Header, strings.ToUpper(uuid.NewV4().String()))
 	}
-	c.Writer.Header().Set(Header, c.Request.Header.Get(Header))
 	c.Next()
 }
 
